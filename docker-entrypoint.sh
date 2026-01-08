@@ -29,11 +29,15 @@ fi
 flask db upgrade
 
 # Start CTFd
-echo "Starting CTFd"
+PORT=${PORT:-8000}
+
+echo "Starting CTFd on 0.0.0.0:$PORT"
+
 exec gunicorn 'CTFd:create_app()' \
-    --bind '0.0.0.0:8000' \
+    --bind "0.0.0.0:$PORT" \
     --workers $WORKERS \
     --worker-tmp-dir "$WORKER_TEMP_DIR" \
     --worker-class "$WORKER_CLASS" \
     --access-logfile "$ACCESS_LOG" \
     --error-logfile "$ERROR_LOG"
+
